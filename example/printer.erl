@@ -239,8 +239,8 @@ on_execute(_RTC, PM, _EC, Data) ->
     P = port_mgr:get_port(PM, "value"),
     case portsvc:is_new(P)
         of true ->
-            {ok, V} = portsvc:read(P),
-            io:format("Received value: ~p", [V])
+            V = portsvc:read(P),
+            io:format("Received value: ~p\n", [V])
          ; false ->
             ok
     end,

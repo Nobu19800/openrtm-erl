@@ -237,7 +237,7 @@ on_reset(_RTC, _PM, _EC, Data) ->
 %%-----------------------------------------------------------------------------
 on_execute(_RTC, PM, _EC, Data) ->
     ?LOG(rtl_info, "Ticker example RTC on_execute"),
-    P = port_mgr:get_port(PM, "value"),
+    P = port_mgr:get_port(PM, "tick"),
     {MS, S, Ms} = now(),
     portsvc:write(P,
         #'RTC_TimedLong'{tm=#'RTC_Time'{sec=MS * 1000000 + S, nsec=Ms * 1000},

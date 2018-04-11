@@ -54,16 +54,17 @@ run() ->
     %application:start(sasl),
     % Create the components
     {ok, _Ticker, TickerFSM} = make_rtc(ticker, "Ticker"),
-    %{ok, _Printer, PrinterFSM} = make_rtc(printer, "Printer"),
+    {ok, _Printer, PrinterFSM} = make_rtc(printer, "Printer"),
     % Get the ports
-    %[OP] = rtc:get_ports(TickerFSM),
-    %[IP] = rtc:get_ports(PrinterFSM),
+    [OP] = rtc:get_ports(TickerFSM),
+    [IP] = rtc:get_ports(PrinterFSM),
     % Make a connection
-    %{ok, #conn_prof{}} = portsvc:connect(OP, make_conn_prof(OP, IP)),
+    {ok, #conn_prof{}} = portsvc:connect(OP, make_conn_prof(OP, IP)),
     % Go for a long walk on the beach
+
     io:get_chars("Press any key to quit.", 1),
     stop_rtc(TickerFSM),
-    %stop_rtc(PrinterFSM),
+    stop_rtc(PrinterFSM),
     ok.
 
 
@@ -123,7 +124,7 @@ stop_rtc(RTC) ->
 start_orber() ->
     case whereis(orber_sup)
         of undefined ->
-            orber:jump_start([{iiop_port,28090}]),
+            orber:jump_start([{iiop_port,2809}]),
             ok
          ; _ ->
             error
@@ -166,7 +167,7 @@ simple_cfg(Type) ->
     Cfg8 = config:set_value("max_instance", "1", Cfg7),
     Cfg9 = config:set_value("language", "Erlang", Cfg8),
     Cfg10 = config:set_value("lang_type", "compile", Cfg9),
-    config:set_value("corba", [{"nameservers", "127.0.0.1:28090"}], Cfg10).
+    config:set_value("corba", [{"nameservers", "127.0.0.1:2809"}], Cfg10).
 
 
 %%-----------------------------------------------------------------------------

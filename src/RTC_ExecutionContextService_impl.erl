@@ -116,7 +116,7 @@ get_profile(_This, #ec_svc{target=T}=State) ->
         rate=Prof#ec_profile.rate,
         owner=Owner,
         participants=lists:map(Objectifier, Prof#ec_profile.parts),
-        properties=nvlist:from_list(Prof#ec_profile.props)
+        properties=nvlist:from_list(config:flatten(Prof#ec_profile.props))
     },
     {reply, Result, State}.
 

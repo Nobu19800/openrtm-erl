@@ -144,7 +144,7 @@ get_component_profile(_OE_This, #dfc_svc{target=T}=State) ->
         port_profiles=lists:map(fun port_prof_corbafier/1,
             Prof#comp_prof.port_profs),
         parent=Parent,
-        properties=nvlist:from_list(Prof#comp_prof.props)
+        properties=nvlist:from_list(config:flatten(Prof#comp_prof.props))
     },
     {reply, Result, State}.
 
@@ -165,11 +165,11 @@ port_prof_corbafier(Prof) ->
     #'RTC_PortProfile'{name=Prof#port_prof.name,
         interfaces=lists:map(fun port_intf_corbafier/1,
             Prof#port_prof.interfaces),
-        port_ref=port:get_corba_obj(Prof#port_prof.port_ref),
+        port_ref=portsvc:get_corba_obj(Prof#port_prof.port_ref),
         connector_profiles=lists:map(fun conn_prof_corbafier/1,
             Prof#port_prof.conn_profs),
         owner=Owner,
-        properties=nvlist:from_list(Prof#port_prof.props)
+        properties=nvlist:from_list(config:flatten(Prof#port_prof.props))
     }.
 
 
@@ -201,14 +201,14 @@ port_intf_corbafier(Prof) ->
 %%-----------------------------------------------------------------------------
 conn_prof_corbafier(Prof) ->
     ConnPortCorbafier = fun(Port) when is_pid(Port) ->
-            port:get_corba_obj(Port);
+            portsvc:get_corba_obj(Port);
         (Port) ->
             Port
     end,
     #'RTC_ConnectorProfile'{name=Prof#conn_prof.name,
-        connector_id=Prof#conn_prof.id,
+        connector_id=lists:last(Prof#conn_prof.id),
         ports=lists:map(ConnPortCorbafier, Prof#conn_prof.ports),
-        properties=nvlist:from_list(Prof#conn_prof.props)
+        properties=nvlist:from_list(config:flatten(Prof#conn_prof.props))
     }.
 
 

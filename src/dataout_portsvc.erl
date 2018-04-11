@@ -701,7 +701,7 @@ corbafy_connprof(Prof) ->
     #'RTC_ConnectorProfile'{name=Prof#conn_prof.name,
         connector_id=Prof#conn_prof.id,
         ports=Ports,
-        properties=nvlist:from_list(Prof#conn_prof.props)}.
+        properties=nvlist:from_list(config:flatten(Prof#conn_prof.props))}.
 
 
 %%-----------------------------------------------------------------------------

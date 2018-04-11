@@ -423,9 +423,12 @@ started(stop, #periodic_ec{ticker=T, parts=Parts}=State) ->
     gen_fsm:cancel_timer(T),
     lists:foreach(fun({H, _, RTC}) -> call_on_shutdown(RTC, H) end, Parts),
     {next_state, stopped, State};
-started(tick, #periodic_ec{period=P}=State) ->
+started(tick, #periodic_ec{period=P, parts=Parts}=State) ->
     ?LOG(rtl_debug, "Periodic EC spinning."),
     Ticker = gen_fsm:send_event_after(P, tick),
+    
+    lists:foreach(fun({_, ECP, _}) -> ec_part:tick(ECP) end, Parts),
+    lists:foreach(fun({_, ECP, _}) -> ec_part:end_of_tick(ECP) end, Parts),
     % Call on_execute+on_state_update or on_error for each RTC
     {next_state, started, State#periodic_ec{ticker=Ticker}}.
 
