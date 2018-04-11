@@ -58,7 +58,7 @@
 %% where
 %%      NVList = [#'SDOPackage_NameValue'{}]
 %% @end
--spec(to_dict(NVLIst::[#'SDOPackage_NameValue'{}]) -> dict()).
+-spec(to_dict(NVLIst::[#'SDOPackage_NameValue'{}]) -> dict:dict()).
 %%-----------------------------------------------------------------------------
 to_dict(NVList) ->
     dict:from_list(to_list(NVList)).
@@ -70,7 +70,7 @@ to_dict(NVList) ->
 %% where
 %%      NVList = [#'SDOPackage_NameValue'{}]
 %% @end
--spec(from_dict(dict()) -> [#'SDOPackage_NameValue'{}]).
+-spec(from_dict(dict:dict()) -> [#'SDOPackage_NameValue'{}]).
 %%-----------------------------------------------------------------------------
 from_dict(Dict) ->
     from_list(dict:to_list(Dict)).
